@@ -2,7 +2,7 @@ import "dotenv/config.js"
 import express from 'express'
 import dbConnection from "./config/connectDB.js"
 import seedDB from "./config/seedDB.js"
-import { updateCookBooksWithRecipesId } from "./config/linkCollectionsIds.js"
+import { updateCookBooksWithRecipesId, updateRecipesWithBookId } from "./config/linkCollectionsIds.js"
 
 const app = express()
 
@@ -17,8 +17,11 @@ dbConnection()
 // seedDB(true)
 
 //cambia el nombre de las recetas por sus ids en la coleccion cookbooks
-updateCookBooksWithRecipesId()
+// updateCookBooksWithRecipesId()
 
+
+//cambia el nombre del libro por su id en la coleccion recipes
+updateRecipesWithBookId()
 const PORT = 4001
 
 app.listen(PORT, () => {
