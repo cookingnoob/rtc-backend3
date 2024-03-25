@@ -6,8 +6,14 @@ const cookBookSchema = new mongoose.Schema(
         price: Number,
         genre: String,
         recipes: [
-            {type: String}
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Recipes"
+            }
         ]
+        // recipes: [
+        //     {type: String}
+        // ]
     },
     {
         timestamps: true,
