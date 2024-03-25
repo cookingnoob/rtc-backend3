@@ -15,16 +15,19 @@ app.use(express.static("public"))
 
 dbConnection()
 
-//Estas 3 funciones son para poblar la bbdd y enlazar los ids entre colecciones
-//poblar la bbdd, true es un parametro opcional para limpiar la base antes de poblarla
+//Estas 3 funciones son para poblar la bbdd y enlazar los IDS entre colecciones
 // seedDB(true)
+    //poblar la bbdd, 
+    //true es un parametro opcional para limpiar la bbdd antes de poblarla
 
-//cambia el nombre de las recetas por sus ids en la coleccion cookbooks
 // updateCookBooksWithRecipesId()
+    //Actualiza la coleccion coobooks
+    //Actualiza el nombre de las recetas por sus ids en la coleccion cookbooks
 
 
-//cambia el nombre del libro por su id en la coleccion recipes
 // updateRecipesWithBookId()
+    //Actualiza la coleccion recipes
+    //actualiza el nombre del libro por su id en la coleccion recipes
 
 app.use("/cookbooks", cookbookRouter)
 app.use("/recipes", recipesRouter)
