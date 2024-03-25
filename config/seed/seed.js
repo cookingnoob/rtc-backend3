@@ -26,7 +26,6 @@ const cookbooks = [
 ]
 
 const recipes = [
-    [
         {
           "name": "Tacos al Pastor",
           "cookbook": "Sabores de México",
@@ -165,8 +164,6 @@ const recipes = [
             "Servir caliente con más salsa BBQ al gusto"
           ]
         }
-      ]
-        
       ]
 
 export {cookbooks, recipes}

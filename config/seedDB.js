@@ -17,9 +17,11 @@ const seedDB = async (cleanDB) => {
     }
     //agregar la seed a cookbooks
     await CookBooks.insertMany(cookbooks);
+    console.log('se subieron los datos de cookbooks')
 
     //agregar la seed a recipes
     await Recipes.insertMany(recipes);
+    console.log("se subieron los datos de recetas")
   } catch (error) {
     console.error(`no se pudo poblar la db ${error.message}`);
   }

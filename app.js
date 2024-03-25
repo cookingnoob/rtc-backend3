@@ -13,7 +13,7 @@ app.use(express.static("public"))
 dbConnection()
 
 
-seedDB(true)
+// seedDB(true)
 
 const PORT = 4001
 
