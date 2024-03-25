@@ -4,6 +4,7 @@ import dbConnection from "./config/connectDB.js"
 import seedDB from "./config/seedDB.js"
 import { updateCookBooksWithRecipesId, updateRecipesWithBookId } from "./config/linkCollectionsIds.js"
 import cookbookRouter from './routes/cookbook.js'
+import recipesRouter from './routes/recipes.js'
 
 const app = express()
 
@@ -26,6 +27,7 @@ dbConnection()
 // updateRecipesWithBookId()
 
 app.use("/cookbooks", cookbookRouter)
+app.use("/recipes", recipesRouter)
 
 const PORT = 4001
 
