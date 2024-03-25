@@ -72,7 +72,7 @@ const recipes = [
         {
           "name": "Risotto al Funghi",
           "cookbook": "Delicias Italianas",
-          "ingredients": "1 taza de arroz arborio, 500g de hongos mixtos, 1 litro de caldo de pollo, 1/2 cebolla, 100g de queso parmesano, mantequilla, aceite de oliva, sal y pimient    "a, sal y pimienta al gusto",
+          "ingredients": "1 taza de arroz arborio, 500g de hongos mixtos, 1 litro de caldo de pollo, 1/2 cebolla, 100g de queso parmesano, mantequilla, aceite de oliva, sal y pimienta, sal y pimienta al gusto",
           "steps": [
             "Sofreír la cebolla en aceite y un poco de mantequilla hasta que esté transparente",
             "Añadir el arroz y tostar ligeramente, asegurando que quede bien impregnado de la mezcla",
@@ -169,4 +169,4 @@ const recipes = [
         
       ]
 
-export {cookbooks, }
+export {cookbooks, recipes}
