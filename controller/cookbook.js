@@ -99,6 +99,7 @@ const putEditRecipesInCookBook = async (req, res, next) => {
       next(error)
       return
     }
+  
     const cookBook = await CookBooks.findById(id)
     const recipeAlradyInDB = await Recipes.findOne({name: recipe})
     
@@ -106,9 +107,11 @@ const putEditRecipesInCookBook = async (req, res, next) => {
         cookBook.recipes.pull(recipeAlradyInDB._id)
         await cookBook.save()
         res.status(200).json({data: 'Se eliminó la receta del libro'})
+     }else if(recipeAlradyInDB && !deleteRecipe){
+        const error = new Error ('ya existe esa receta')
+        error.status = 409
+        next(error)
      }
-    
-
   } catch (error) {
     next(error)
   }
