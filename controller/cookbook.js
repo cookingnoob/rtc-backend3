@@ -31,6 +31,8 @@ const getCookBookById = async (req, res, next) => {
 };
 
 //POST crea un nuevo libro
+//crea una instancia de Recipes por cada nombre en la lista de recetas
+//actualiza recipes cambiando el nombre por el id de la receta 
 const postNewCoobook = async(req, res, next) => {
   try {
     const {title, price, genre, recipes} = req.body
