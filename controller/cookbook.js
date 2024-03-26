@@ -102,15 +102,28 @@ const putEditRecipesInCookBook = async (req, res, next) => {
   
     const cookBook = await CookBooks.findById(id)
     const recipeAlradyInDB = await Recipes.findOne({name: recipe})
-    
+    const isRecipeInBook = cookBook.recipes.some((recipe) => {
+        return recipe._id.toString() === recipeAlradyInDB._id.toString()
+    })
+
      if(deleteRecipe){
         cookBook.recipes.pull(recipeAlradyInDB._id)
         await cookBook.save()
         res.status(200).json({data: 'Se eliminó la receta del libro'})
-     }else if(recipeAlradyInDB && !deleteRecipe){
-        const error = new Error ('ya existe esa receta')
+     }else if(isRecipeInBook && !deleteRecipe){
+        const error = new Error ('ya existe esa receta en este libro')
         error.status = 409
         next(error)
+     }else{
+      const newRecipe = await new Recipes(
+        {
+          name: recipe
+        }
+      )
+      await newRecipe.save()
+      cookBook.recipes.push(newRecipe._id)
+      await cookBook.save()
+      res.status(201).json({message: 'se agregó la receta', data: newRecipe, cookBook})
      }
   } catch (error) {
     next(error)
