@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllCookBooks, getCookBookById, postNewCoobook, putEditCookBook, putEditRecipesInCookBook } from '../controller/cookbook.js'
+import { deleteCookBook, getAllCookBooks, getCookBookById, postNewCoobook, putEditCookBook, putEditRecipesInCookBook } from '../controller/cookbook.js'
 
 const router = express.Router()
 
@@ -13,7 +13,7 @@ router.put('/edit/:id', putEditCookBook)
 
 router.put('/:id/update-recipes', putEditRecipesInCookBook)
 
-router.delete('/delete/:id')
+router.delete('/delete/:id', deleteCookBook)
 
 router.use((req, res, next) => {
     const error = new Error('No encontramos el libro de cocina')

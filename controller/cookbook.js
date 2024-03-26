@@ -131,7 +131,21 @@ const putEditRecipesInCookBook = async (req, res, next) => {
 };
 
 //delete
-const deleteCookBook = async (req, res, next) => {};
+const deleteCookBook = async (req, res, next) => {
+  try{
+    const {id} = req.params
+    const bookToBeDeleted = await CookBooks.findByIdAndDelete(id)
+    if(!bookToBeDeleted){
+      const error = new Error('no encontramos el libro')
+      error.status = 404
+      next(error)
+      return
+    }
+    res.status(200).json({data: 'se eliminó el libro'})
+  }catch(error){
+    next(error)
+  }
+};
 
 export {
   getAllCookBooks,
