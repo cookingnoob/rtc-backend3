@@ -32,37 +32,73 @@ const getCookBookById = async (req, res, next) => {
 
 //POST crea un nuevo libro
 //crea una instancia de Recipes por cada nombre en la lista de recetas
-//actualiza recipes cambiando el nombre por el id de la receta 
-const postNewCoobook = async(req, res, next) => {
+//actualiza recipes cambiando el nombre por el id de la receta
+const postNewCoobook = async (req, res, next) => {
   try {
-    const {title, price, genre, recipes} = req.body
-    const recipesIds = []
-    if(recipes){
+    const { title, price, genre, recipes } = req.body;
+    const recipesIds = [];
+    if (recipes) {
       try {
-        for(const recipe of recipes){
-          const newRecipe = await new Recipes({name: recipe.name})
-          await newRecipe.save()
-          recipesIds.push(newRecipe._id)
+        for (const recipe of recipes) {
+          const newRecipe = await new Recipes({ name: recipe.name });
+          await newRecipe.save();
+          recipesIds.push(newRecipe._id);
         }
       } catch (error) {
-        next(error)
+        next(error);
       }
     }
     const newCookBook = new CookBooks({
-        title,
-        price, 
-        genre, 
-        recipes: recipesIds
-    })
-    await newCookBook.save()
-    res.status(200).json({data: newCookBook})
+      title,
+      price,
+      genre,
+      recipes: recipesIds,
+    });
+    await newCookBook.save();
+    res.status(200).json({ data: newCookBook });
   } catch (error) {
+    next(error);
+  }
+};
+
+//PUT editar libro
+const putEditCookBook = async (req, res, next) => {
+  try{
+    const {id} = req.params;
+    const {title, price, genre, recipes} = req.body
+    if(recipes){
+      const error = new Error ('no puedes editar recetas aquí')
+      error.status = 400
+      next(error)
+      return
+    }
+    const editCookBook = await CookBooks.findByIdAndUpdate(id,
+      {title, price, genre},
+      {new: true, runValidators: true}
+    )
+    if(!editCookBook){
+      const error = new Error ('no se encontró el libro que quieres editar')
+      error.status = 404
+      next(error)
+      return
+    }
+    res.status(200).json({data: editCookBook})
+  } catch(error){
     next(error)
   }
-}
+};
 
-//put editar libro
-//put editar recetas
+//PUT editar recetas
+const putEditRecipesInCookBook = async (req, res, next) => {};
+
 //delete
+const deleteCookBook = async (req, res, next) => {};
 
-export { getAllCookBooks, getCookBookById, postNewCoobook };
+export {
+  getAllCookBooks,
+  getCookBookById,
+  postNewCoobook,
+  putEditCookBook,
+  putEditRecipesInCookBook,
+  deleteCookBook
+};

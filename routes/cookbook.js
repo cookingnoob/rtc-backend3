@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllCookBooks, getCookBookById, postNewCoobook } from '../controller/cookbook.js'
+import { getAllCookBooks, getCookBookById, postNewCoobook, putEditCookBook } from '../controller/cookbook.js'
 
 const router = express.Router()
 
@@ -9,7 +9,7 @@ router.get('/:id', getCookBookById)
 
 router.post('/add', postNewCoobook)
 
-router.put('/edit/:id')
+router.put('/edit/:id', putEditCookBook)
 
 router.put('/:id/update-recipes')
 
