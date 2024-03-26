@@ -89,7 +89,30 @@ const putEditCookBook = async (req, res, next) => {
 };
 
 //PUT editar recetas
-const putEditRecipesInCookBook = async (req, res, next) => {};
+const putEditRecipesInCookBook = async (req, res, next) => {
+  try {
+    const {id} = req.params
+    const {title, price, genre, recipe, deleteRecipe} = req.body
+    if(title || price || genre){
+      const error = new Error ('solo puedes editar recetas aqui')
+      error.status = 400
+      next(error)
+      return
+    }
+    const cookBook = await CookBooks.findById(id)
+    const recipeAlradyInDB = await Recipes.findOne({name: recipe})
+    
+     if(deleteRecipe){
+        cookBook.recipes.pull(recipeAlradyInDB._id)
+        await cookBook.save()
+        res.status(200).json({data: 'Se eliminó la receta del libro'})
+     }
+    
+
+  } catch (error) {
+    next(error)
+  }
+};
 
 //delete
 const deleteCookBook = async (req, res, next) => {};
