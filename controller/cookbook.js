@@ -33,12 +33,24 @@ const getCookBookById = async (req, res, next) => {
 //POST crea un nuevo libro
 const postNewCoobook = async(req, res, next) => {
   try {
-    const {title, price, genre, recipes} = req.params
+    const {title, price, genre, recipes} = req.body
+    const recipesIds = []
+    if(recipes){
+      try {
+        for(const recipe of recipes){
+          const newRecipe = await new Recipes({name: recipe.name})
+          await newRecipe.save()
+          recipesIds.push(newRecipe._id)
+        }
+      } catch (error) {
+        next(error)
+      }
+    }
     const newCookBook = new CookBooks({
-      title,
-      price, 
-      genre, 
-      recipes,
+        title,
+        price, 
+        genre, 
+        recipes: recipesIds
     })
     await newCookBook.save()
     res.status(200).json({data: newCookBook})
@@ -51,4 +63,4 @@ const postNewCoobook = async(req, res, next) => {
 //put editar recetas
 //delete
 
-export { getAllCookBooks, getCookBookById };
+export { getAllCookBooks, getCookBookById, postNewCoobook };
