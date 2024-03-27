@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllRecipes, getRecipeById, postNewRecipe } from '../controller/recipes.js'
+import { deleteRecipe, getAllRecipes, getRecipeById, postNewRecipe } from '../controller/recipes.js'
 
 const router = express.Router()
 
@@ -8,5 +8,7 @@ router.get("/", getAllRecipes)
 router.get("/:id", getRecipeById)
 
 router.post("/add", postNewRecipe)
+
+router.delete("/delete/:id", deleteRecipe)
 
 export default router

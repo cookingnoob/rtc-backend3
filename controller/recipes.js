@@ -77,5 +77,20 @@ const postNewRecipe = async (req, res, next) => {
 //put edit recipe
 //put edit cookbook in recipe
 //delete
+const deleteRecipe = async (req, res, next) => {
+    try{
+        const {id} = req.params
+        const recipeToBeDeleted = await Recipes.findByIdAndDelete(id)
+        if(!recipeToBeDeleted){
+          const error = new Error('no encontramos la receta')
+          error.status = 404
+          next(error)
+          return
+        }
+        res.status(200).json({data: 'se eliminó la receta'})
+      }catch(error){
+        next(error)
+      }
+}
 
-export {getAllRecipes, getRecipeById, postNewRecipe}
+export {getAllRecipes, getRecipeById, postNewRecipe, deleteRecipe}
