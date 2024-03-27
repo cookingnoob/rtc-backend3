@@ -35,26 +35,40 @@ const getAllRecipes = async (req, res, next) => {
 const postNewRecipe = async (req, res, next) => {
     try {
       const { name, cookbook, steps, ingredients } = req.body;
-      let bookId 
-      if (cookbook) {
-          const existingBook = await CookBooks.findOne({title: cookbook})
-          if(existingBook){
-              bookId = existingBook._id
-          }else{
-              const newCookBook = await new CookBooks({ title: cookbook });
-              await newCookBook.save();
-              console.log('se creó un libro nuevo')
-              bookId = newCookBook._id
-          } 
-        }
-      const newRecipe = new Recipes({
-        name,
-        cookbook: bookId,
-        steps,
-        ingredients,
-      });
-      await newRecipe.save();
-      res.status(200).json({ data: newRecipe });
+    
+    //buscar si ya existe esa receta y si si mandar error 409
+
+    const existingBook = await CookBooks.findOne({title: cookbook})
+
+    if(existingBook){
+        const newRecipe = new Recipes({
+            name,
+            cookbook: existingBook._id,
+            steps,
+            ingredients,
+          });
+          await newRecipe.save();
+          res.status(200).json({ data: newRecipe });
+    }else{
+         const newCookBook = await new CookBooks({ title: cookbook,});
+         await newCookBook.save();
+         console.log('se creó un libro nuevo')
+         const newRecipe = new Recipes({
+            name,
+            cookbook: newCookBook._id,
+            steps,
+            ingredients,
+        });
+        console.log('se creo la nueva receta')
+        await newRecipe.save();
+        const updateBookWithId = await CookBooks.findByIdAndUpdate(newCookBook._id,
+            {$push: {recipes: newRecipe._id}}
+            )
+        console.log('el libro tiene la nueva receta')
+        res.status(200).json({ data: newRecipe });
+    } 
+        
+   
     } catch (error) {
       next(error);
     }
