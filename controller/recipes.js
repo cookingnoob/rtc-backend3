@@ -1,8 +1,7 @@
 import CookBooks from "../models/cookbooks.js";
 import Recipes from "../models/recipes.js";
 
-
-//get all recipes
+//GET all recipes
 const getAllRecipes = async (req, res, next) => {
     try {
       const recipes = await Recipes.find().populate("cookbook", "title");
@@ -10,10 +9,10 @@ const getAllRecipes = async (req, res, next) => {
     } catch (error) {
       next(error);
     }
-  };
+};
 
-  //GET id recipe
-  const getRecipeById = async (req, res, next) => {
+//GET id recipe
+const getRecipeById = async (req, res, next) => {
     try {
       const { id } = req.params;
       const recipe = await Recipes.findById(id).populate(
@@ -29,9 +28,9 @@ const getAllRecipes = async (req, res, next) => {
     } catch (error) {
       next(error);
     }
-  };
+};
   
-//post new recipe
+//POST  new recipe
 const postNewRecipe = async (req, res, next) => {
     try {
       const { name, cookbook, steps, ingredients } = req.body;
@@ -75,8 +74,34 @@ const postNewRecipe = async (req, res, next) => {
   };
 
 //put edit recipe
+const putEditRecipe = async (req, res, next) => {
+    try{
+      const {id} = req.params;
+      const {name, cookbook, ingredients, steps } = req.body
+      if(cookbook){
+        const error = new Error ('no puedes editar el libro de cocina aquí')
+        error.status = 400
+        next(error)
+        return
+      }
+      const editRecipe = await Recipes.findByIdAndUpdate(id,
+        {name, ingredients, steps},
+        {new: true, runValidators: true}
+      )
+      if(!editRecipe){
+        const error = new Error ('no se encontró la receta que quieres editar')
+        error.status = 404
+        next(error)
+        return
+      }
+      res.status(200).json({data: editRecipe})
+    } catch(error){
+      next(error)
+    }
+  };
 //put edit cookbook in recipe
-//delete
+
+//DELETE    
 const deleteRecipe = async (req, res, next) => {
     try{
         const {id} = req.params
@@ -93,4 +118,4 @@ const deleteRecipe = async (req, res, next) => {
       }
 }
 
-export {getAllRecipes, getRecipeById, postNewRecipe, deleteRecipe}
+export {getAllRecipes, getRecipeById, postNewRecipe, deleteRecipe, putEditRecipe}
