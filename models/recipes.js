@@ -3,7 +3,11 @@ import mongoose from 'mongoose'
 const recipesSchema = new mongoose.Schema(
     {
         name: String,
-        cookbook: String,
+        cookbook: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Cookbooks'
+        },
+        // cookbook: String,
         ingredients: String,
         steps: [{
             type: String
