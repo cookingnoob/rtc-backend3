@@ -37,17 +37,16 @@ const postNewRecipe = async (req, res, next) => {
       const { name, cookbook, steps, ingredients } = req.body;
       let bookId 
       if (cookbook) {
-          //busca si existe el libro, si existe se extrae ese id
-          //si no existe se crea un nuevo libro
-
           const existingBook = await CookBooks.findOne({title: cookbook})
-            bookId = existingBook._id
-        }else {
-            const newCookBook = await new Recipes({ title: cookbook.title });
-            await newCookBook.save();
-            console.log('se creó un libro nuevo')
-            bookId = newCookBook
-      }
+          if(existingBook){
+              bookId = existingBook._id
+          }else{
+              const newCookBook = await new CookBooks({ title: cookbook });
+              await newCookBook.save();
+              console.log('se creó un libro nuevo')
+              bookId = newCookBook._id
+          } 
+        }
       const newRecipe = new Recipes({
         name,
         cookbook: bookId,
