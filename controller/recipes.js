@@ -99,8 +99,42 @@ const putEditRecipe = async (req, res, next) => {
       next(error)
     }
   };
-//put edit cookbook in recipe
 
+//PUT edit cookbook in recipe
+const putEditCookbookInRecipe = async (req, res, next) => {
+    try {
+      const {id} = req.params
+      const {name, cookbook, steps, ingredients, deleteCookbook} = req.body
+
+      //checa si hay valores que no sean cookbook y lanza error
+      if(name || steps || ingredients){
+        const error = new Error ('solo puedes editar el libro de cocina aqui')
+        error.status = 400
+        next(error)
+        return
+      }
+    
+      //busca la receta 
+      try{
+        const recipe = await Recipes.findById(id)
+
+      } catch{
+      //si no existe maneja lanza error
+    
+        const error = new Error ('no encontramos la receta')
+        error.status = 404
+        next(error)
+      }
+      
+
+      //revisa si existe el libro de cocina en la db
+      const cookbookAlradyInDB = await CookBooks.findOne({title: cookbook})
+      
+      
+    } catch (error) {
+      next(error)
+    }
+  };
 //DELETE    
 const deleteRecipe = async (req, res, next) => {
     try{
@@ -118,4 +152,4 @@ const deleteRecipe = async (req, res, next) => {
       }
 }
 
-export {getAllRecipes, getRecipeById, postNewRecipe, deleteRecipe, putEditRecipe}
+export {getAllRecipes, getRecipeById, postNewRecipe, deleteRecipe, putEditRecipe, putEditCookbookInRecipe}
