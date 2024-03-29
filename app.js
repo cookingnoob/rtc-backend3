@@ -5,6 +5,8 @@ import seedDB from "./config/seedDB.js"
 import { updateCookBooksWithRecipesId, updateRecipesWithBookId } from "./config/linkCollectionsIds.js"
 import cookbookRouter from './routes/cookbook.js'
 import recipesRouter from './routes/recipes.js'
+import userRouter from './routes/user.js'
+
 
 const app = express()
 
@@ -31,6 +33,7 @@ dbConnection()
 
 app.use("/cookbooks", cookbookRouter)
 app.use("/recipes", recipesRouter)
+app.use('/user', userRouter)
 
 app.use((req, res, next) => {
     const error = new Error ("No encontramos lo que buscabas")
