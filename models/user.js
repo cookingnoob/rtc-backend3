@@ -13,3 +13,7 @@ const userSchema = new mongoose.Schema({
         type: String,
     }
 })
+
+const Users = mongoose.model('users', userSchema)
+
+export default Users
