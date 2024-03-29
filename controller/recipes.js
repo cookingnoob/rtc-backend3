@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import CookBooks from "../models/cookbooks.js";
 import Recipes from "../models/recipes.js";
 
@@ -19,13 +20,10 @@ const getRecipeById = async (req, res, next) => {
         "cookbook",
         "title genre price"
       );
-      if (!recipe) {
-        const error = new Error("No se encontró el libro de cocina que buscabas");
-        error.status = 404;
-        next(error);
-      }
       res.status(200).json({ data: recipe });
-    } catch (error) {
+    } catch {
+      const error = new Error("No se encontró el libro de cocina que buscabas");
+      error.status = 404;
       next(error);
     }
 };
@@ -89,13 +87,13 @@ const putEditRecipe = async (req, res, next) => {
         {new: true, runValidators: true}
       )
       if(!editRecipe){
-        const error = new Error ('no se encontró la receta que quieres editar')
-        error.status = 404
-        next(error)
+     
         return
       }
       res.status(200).json({data: editRecipe})
-    } catch(error){
+    } catch{
+      const error = new Error ('no se encontró la receta que quieres editar')
+      error.status = 404
       next(error)
     }
   };
@@ -114,22 +112,25 @@ const putEditCookbookInRecipe = async (req, res, next) => {
         return
       }
     
+      const isCookbookInDB = await CookBooks.findOne({title: cookbook})
+
       //busca la receta 
-      try{
-        const recipe = await Recipes.findById(id)
-
-      } catch{
-      //si no existe maneja lanza error
-    
-        const error = new Error ('no encontramos la receta')
-        error.status = 404
-        next(error)
+      const recipe = await Recipes.findById(id)
+      if(!recipe.cookbook){
+        if(isCookbookInDB){
+          recipe.cookbook = isCookbookInDB._id
+          await recipe.save()
+          res.status(200).json({data: 'se agrego el libro a la receta'})
+        }else{
+          const newCookBook = await new CookBooks({title: cookbook})
+          await newCookBook.save()
+          recipe.cookbook = newCookBook._id
+          await recipe.save()
+          res.status(200).json({data: 'se agrego el libro'})
+        }
+      }else {
+   
       }
-      
-
-      //revisa si existe el libro de cocina en la db
-      const cookbookAlradyInDB = await CookBooks.findOne({title: cookbook})
-      
       
     } catch (error) {
       next(error)
