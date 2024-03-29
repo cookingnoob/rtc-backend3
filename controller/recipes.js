@@ -132,11 +132,14 @@ const putEditCookbookInRecipe = async (req, res, next) => {
           res.status(200).json({data: 'se agrego el libro'})
         }
       }else {
-     
         if(recipe.cookbook.toString() === isCookbookInDB._id.toString()){
           const error = new Error('La receta ya tiene ese libro')
           error.status = 409
           next(error)
+        }else{
+          recipe.cookbook = isCookbookInDB._id
+          await recipe.save()
+          res.status(200).json({data: 'se cambio el libro de la receta'})
         }
       }
       
