@@ -116,11 +116,14 @@ const putEditCookbookInRecipe = async (req, res, next) => {
 
       //busca la receta 
       const recipe = await Recipes.findById(id)
+
       if(!recipe.cookbook){
+        //si el librio existe en la db agrega el id
         if(isCookbookInDB){
           recipe.cookbook = isCookbookInDB._id
           await recipe.save()
           res.status(200).json({data: 'se agrego el libro a la receta'})
+          //si no existe en la db crea una instancia y agrega el id 
         }else{
           const newCookBook = await new CookBooks({title: cookbook})
           await newCookBook.save()
@@ -129,7 +132,12 @@ const putEditCookbookInRecipe = async (req, res, next) => {
           res.status(200).json({data: 'se agrego el libro'})
         }
       }else {
-   
+     
+        if(recipe.cookbook.toString() === isCookbookInDB._id.toString()){
+          const error = new Error('La receta ya tiene ese libro')
+          error.status = 409
+          next(error)
+        }
       }
       
     } catch (error) {
