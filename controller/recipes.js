@@ -37,9 +37,7 @@ const postNewRecipe = async (req, res, next) => {
       error.status = 400
       next(error)
     }
-
     const existingBook = await CookBooks.findOne({title: cookbook})
-//SIEMPRE SE CREA UN NUEVO COOKBOOK AUNQUE ESTE VACIO EL CAMPO  
     if(existingBook){
         const newRecipe = new Recipes({
             name,
@@ -121,36 +119,26 @@ const putEditCookbookInRecipe = async (req, res, next) => {
       //busca la receta 
       const recipe = await Recipes.findById(id)
 
-      if(!recipe.cookbook){
-        //si el librio existe en la db agrega el id
-        if(isCookbookInDB){
-          recipe.cookbook = isCookbookInDB._id
-          await recipe.save()
-          res.status(200).json({data: 'se agrego el libro a la receta'})
-        }else if(deleteCookbook){
-          const error = new Error('no puedes borrar algo que no existe')
-          error.status = 400
-          next(error)
-        } else{
-          //si no existe en la db crea una instancia y agrega el id 
-          const newCookBook = await new CookBooks({title: cookbook})
-          await newCookBook.save()
-          recipe.cookbook = newCookBook._id
-          await recipe.save()
-          res.status(200).json({data: 'se agrego el libro'})
-        }
-      }else {
+      //si el librio existe en la db agrega el id
+      if(isCookbookInDB){
         if(recipe.cookbook.toString() === isCookbookInDB._id.toString()){
           const error = new Error('La receta ya tiene ese libro')
           error.status = 409
           next(error)
-        }else{
+        }else {
           recipe.cookbook = isCookbookInDB._id
           await recipe.save()
-          res.status(200).json({data: 'se cambio el libro de la receta'})
+          res.status(200).json({data: 'se agrego el libro a la receta'})
         }
+      }else{
+        //si no existe en la db crea una instancia y agrega el id 
+        const newCookBook = await new CookBooks({title: cookbook})
+        await newCookBook.save()
+        recipe.cookbook = newCookBook._id
+        await recipe.save()
+        res.status(200).json({data: 'se agrego el libro'})
+        //falta linkear la receta al cookbook
       }
-      
     } catch (error) {
       next(error)
     }
