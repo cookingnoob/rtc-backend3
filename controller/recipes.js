@@ -32,11 +32,14 @@ const getRecipeById = async (req, res, next) => {
 const postNewRecipe = async (req, res, next) => {
     try {
       const { name, cookbook, steps, ingredients } = req.body;
-    
-    //buscar si ya existe esa receta y si si mandar error 409
+    if(!cookbook){
+      const error = new Error('no llenaste el campo cookbook')
+      error.status = 400
+      next(error)
+    }
 
     const existingBook = await CookBooks.findOne({title: cookbook})
-
+//SIEMPRE SE CREA UN NUEVO COOKBOOK AUNQUE ESTE VACIO EL CAMPO  
     if(existingBook){
         const newRecipe = new Recipes({
             name,
@@ -45,6 +48,7 @@ const postNewRecipe = async (req, res, next) => {
             ingredients,
           });
           await newRecipe.save();
+          console.log('se agrego un libro existente')
           res.status(200).json({ data: newRecipe });
     }else{
          const newCookBook = await new CookBooks({ title: cookbook,});
@@ -123,8 +127,12 @@ const putEditCookbookInRecipe = async (req, res, next) => {
           recipe.cookbook = isCookbookInDB._id
           await recipe.save()
           res.status(200).json({data: 'se agrego el libro a la receta'})
+        }else if(deleteCookbook){
+          const error = new Error('no puedes borrar algo que no existe')
+          error.status = 400
+          next(error)
+        } else{
           //si no existe en la db crea una instancia y agrega el id 
-        }else{
           const newCookBook = await new CookBooks({title: cookbook})
           await newCookBook.save()
           recipe.cookbook = newCookBook._id
