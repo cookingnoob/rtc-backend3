@@ -1,8 +1,16 @@
 import bcrypt from 'bcrypt'
 import Users from '../models/user.js'
+import { signToken } from '../config/jwt.js'
+import { validationResult } from 'express-validator'
 
 const registerUser = async (req, res, next) => {
     try {
+        const errors = validationResult(req)
+
+        if(!errors.isEmpty()){
+          return res.status(400).json({errors: errors.array()})
+        }
+
         const {email, password} = req.body
 
         const userExists = await Users.findOne({email: email})
@@ -48,6 +56,8 @@ const loginUser = async(req, res, next) => {
         }
 
         if(userInDB && isPasswordCorrect){
+            const payload = {_id: userInDB._id}
+            const token = signToken(payload)
             res.status(200).json({data: 'datos correctos para iniciar sesion'})
         }
 
