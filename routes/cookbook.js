@@ -1,5 +1,6 @@
 import express from 'express'
 import { deleteCookBook, getAllCookBooks, getCookBookById, postNewCoobook, putEditCookBook, putEditRecipesInCookBook } from '../controller/cookbook.js'
+import { validateToken } from '../middlewares/authJWT.js'
 
 const router = express.Router()
 
@@ -7,7 +8,7 @@ router.get('/', getAllCookBooks)
 
 router.get('/:id', getCookBookById)
 
-router.post('/add', postNewCoobook)
+router.post('/add', validateToken ,postNewCoobook)
 
 router.put('/edit/:id', putEditCookBook)
 

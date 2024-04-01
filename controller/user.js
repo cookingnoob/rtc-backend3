@@ -29,7 +29,9 @@ const registerUser = async (req, res, next) => {
                                     password: hashedPassword
                                 })
         await newUser.save()
-        res.status(200).json({data: `se creo el usuario ${email}`})
+        const payload = {id: newUser._id}
+        const token = signToken(payload)
+        res.status(200).json({data: `se creo el usuario ${email}`, token})
 
     } catch (error) {
         next(error)
@@ -56,9 +58,9 @@ const loginUser = async(req, res, next) => {
         }
 
         if(userInDB && isPasswordCorrect){
-            const payload = {_id: userInDB._id}
-            const token = signToken(payload)
-            res.status(200).json({data: 'datos correctos para iniciar sesion'})
+            const payload = {id: userInDB._id}
+            const token = signToken(payload )
+            res.status(200).json({data: 'datos correctos para iniciar sesion', token})
         }
 
     } catch (error) {
