@@ -10,11 +10,11 @@ router.get('/:id', getCookBookById)
 
 router.post('/add', validateToken ,postNewCoobook)
 
-router.put('/edit/:id', putEditCookBook)
+router.put('/edit/:id',validateToken, putEditCookBook)
 
-router.put('/:id/update-recipes', putEditRecipesInCookBook)
+router.put('/:id/update-recipes',validateToken ,putEditRecipesInCookBook)
 
-router.delete('/delete/:id', deleteCookBook)
+router.delete('/delete/:id',validateToken ,deleteCookBook)
 
 router.use((req, res, next) => {
     const error = new Error('No encontramos el libro de cocina')

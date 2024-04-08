@@ -59,8 +59,8 @@ const loginUser = async(req, res, next) => {
 
         if(userInDB && isPasswordCorrect){
             const payload = {id: userInDB._id}
-            const token = signToken(payload )
-            res.status(200).json({data: 'datos correctos para iniciar sesion', token})
+            const token = signToken(payload)
+            res.status(200).json({data: 'Iniciaste sesion', token})
         }
 
     } catch (error) {
