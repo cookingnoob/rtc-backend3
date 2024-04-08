@@ -8,6 +8,7 @@ import recipesRouter from './routes/recipes.js'
 import userRouter from './routes/user.js'
 import { limiter } from "./middlewares/rateLimiter.js"
 import cors from 'cors'
+import helmet from 'helmet'
 import {v2} from 'cloudinary'
 
 const app = express()
@@ -18,6 +19,9 @@ app.use(cors({
     },
 }))
 
+app.disable('x-powered-by');
+
+app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static("public"))
