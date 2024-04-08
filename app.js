@@ -6,6 +6,7 @@ import { updateCookBooksWithRecipesId, updateRecipesWithBookId } from "./config/
 import cookbookRouter from './routes/cookbook.js'
 import recipesRouter from './routes/recipes.js'
 import userRouter from './routes/user.js'
+import { limiter } from "./middlewares/rateLimiter.js"
 
 
 const app = express()
@@ -30,7 +31,7 @@ dbConnection()
 // updateRecipesWithBookId()
     //Actualiza la coleccion recipes
     //actualiza el nombre del libro por su id en la coleccion recipes
-
+app.use(limiter)
 app.use("/cookbooks", cookbookRouter)
 app.use("/recipes", recipesRouter)
 app.use('/user', userRouter)
