@@ -20,7 +20,7 @@ const registerUser = async (req, res, next) => {
             error.status = 400
             next(error)
         }
-        
+
         const hashedPassword = await bcrypt.hash(password, 10)
 
         const newUser = new Users(
