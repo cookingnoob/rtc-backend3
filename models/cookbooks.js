@@ -10,7 +10,8 @@ const cookBookSchema = new mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Recipes"
             }
-        ]
+        ],
+        cover: String,
         // recipes: [
         //     {type: String}
         // ]

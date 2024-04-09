@@ -19,4 +19,6 @@ const uploadFile = (folderName) => {
 
 const uploadAvatars = uploadFile('avatars').single('avatar')
 
-export {uploadAvatars}
+const uploadBookCover = uploadFile('covers').single('cover')
+
+export {uploadAvatars, uploadBookCover}

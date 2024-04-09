@@ -45,7 +45,6 @@ dbConnection()
 
 //
 
-console.log()
 
 app.use(limiter)
 app.use("/cookbooks", cookbookRouter)
