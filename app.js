@@ -9,7 +9,6 @@ import userRouter from './routes/user.js'
 import { limiter } from "./middlewares/rateLimiter.js"
 import cors from 'cors'
 import helmet from 'helmet'
-import {v2} from 'cloudinary'
 
 const app = express()
 
@@ -45,6 +44,8 @@ dbConnection()
     //actualiza el nombre del libro por su id en la coleccion recipes
 
 //
+
+console.log()
 
 app.use(limiter)
 app.use("/cookbooks", cookbookRouter)
