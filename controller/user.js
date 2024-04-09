@@ -68,11 +68,21 @@ const loginUser = async(req, res, next) => {
     }
 }
 
-const uploadUserAvatar = async (id, path) => {
-   const userExist = await Users.findByIdAndUpdate(id, {avatar: path}, {new: true, runValidators: true})
-   console.log(userExist)
-   console.log(id)
-   console.log(path)
+
+const handleAvatarUrlInDb = async (req, res, next) => {
+    try{
+        const {path} = req.file;
+        const {id} = req.user
+        const userExist = await Users.findByIdAndUpdate(id, {avatar: path}, {new: true, runValidators: true})
+        if(!userExist){
+            const error = new Error('no existe este usuario')
+            error.status = 404
+            next(error)
+        }
+        res.status(200).json({data: 'se subio el avatar exitosamente'})
+    }catch(error){
+        next(error)
+    }
 }
 
-export {registerUser, loginUser, uploadUserAvatar}
+export {registerUser, loginUser, handleAvatarUrlInDb}
