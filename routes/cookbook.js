@@ -10,6 +10,8 @@ router.get('/:id', getCookBookById)
 
 router.post('/add', validateToken ,postNewCoobook)
 
+router.post('/add-cover')
+
 router.put('/edit/:id',validateToken, putEditCookBook)
 
 router.put('/:id/update-recipes',validateToken ,putEditRecipesInCookBook)

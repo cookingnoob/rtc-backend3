@@ -2,14 +2,21 @@ import multer from "multer";
 import {v2 as cloudinary} from 'cloudinary'
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 
-const storage = new CloudinaryStorage({
+const handleCloudinaryStorage = (folderName) => {
+  return new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-      folder: 'avatars',
+      folder: folderName,
       allowFortmats: ['jpg', 'png', 'jpeg', 'gif']
     },
   });
+}
 
-const uploadFile = multer({storage})
+const uploadFile = (folderName) => {
+  const storage = handleCloudinaryStorage(folderName)
+  return multer({storage}) 
+}
 
-export default uploadFile
+const uploadAvatars = uploadFile('avatars').single('avatar')
+
+export {uploadAvatars}
