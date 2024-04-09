@@ -68,4 +68,11 @@ const loginUser = async(req, res, next) => {
     }
 }
 
-export {registerUser, loginUser}
+const uploadUserAvatar = async (id, path) => {
+   const userExist = await Users.findByIdAndUpdate(id, {avatar: path}, {new: true, runValidators: true})
+   console.log(userExist)
+   console.log(id)
+   console.log(path)
+}
+
+export {registerUser, loginUser, uploadUserAvatar}

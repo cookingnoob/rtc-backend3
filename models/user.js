@@ -11,7 +11,9 @@ const userSchema = new mongoose.Schema({
     password:
     {
         type: String,
-    }
+    },
+    avatar: 
+    {type: String}
 })
 
 const Users = mongoose.model('users', userSchema)
