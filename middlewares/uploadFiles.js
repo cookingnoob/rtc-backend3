@@ -7,7 +7,7 @@ const handleCloudinaryStorage = (folderName) => {
     cloudinary: cloudinary,
     params: {
       folder: folderName,
-      allowFortmats: ['jpg', 'png', 'jpeg', 'gif']
+      allowFortmats: ['jpg', 'png', 'jpeg', 'gif', 'webp']
     },
   });
 }

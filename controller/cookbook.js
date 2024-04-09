@@ -65,7 +65,7 @@ const postNewCoobook = async (req, res, next) => {
 //agrega url de la portada del libro
 const handleCoverUrlInDb = async (req, res, next) => {
   try {
-    const { path } = req.files;
+    const { path } = req.file;
     const { id } = req.params;
     const cookbookExists = await CookBooks.findByIdAndUpdate(
       id,
