@@ -15,6 +15,9 @@ const getAllCookBooks = async (req, res, next) => {
 const getCookBookById = async (req, res, next) => {
   try {
     const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "ID no válido" });
+    }
     const cookbook = await CookBooks.findById(id).populate(
       "recipes",
       "name ingredients steps"

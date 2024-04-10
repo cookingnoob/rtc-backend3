@@ -31,22 +31,24 @@ dbConnection()
 //Estas 3 funciones son para poblar la bbdd y enlazar los IDS entre colecciones
 
 // seedDB(true)
-    //poblar la bbdd, 
-    //true es un parametro opcional para limpiar la bbdd antes de poblarla
+//poblar la bbdd, 
+//true es un parametro opcional para limpiar la bbdd antes de poblarla
 
 // updateCookBooksWithRecipesId()
-    //Actualiza la coleccion coobooks
-    //Actualiza el nombre de las recetas por sus ids en la coleccion cookbooks
+//Actualiza la coleccion coobooks
+//Actualiza el nombre de las recetas por sus ids en la coleccion cookbooks
 
 
 // updateRecipesWithBookId()
-    //Actualiza la coleccion recipes
-    //actualiza el nombre del libro por su id en la coleccion recipes
+//Actualiza la coleccion recipes
+//actualiza el nombre del libro por su id en la coleccion recipes
 
 //
 
-
+app.set('trust proxy', true);
 app.use(limiter)
+
+//rutas
 app.use("/cookbooks", cookbookRouter)
 app.use("/recipes", recipesRouter)
 app.use('/user', userRouter)
