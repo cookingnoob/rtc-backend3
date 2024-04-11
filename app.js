@@ -53,6 +53,10 @@ app.use("/cookbooks", cookbookRouter)
 app.use("/recipes", recipesRouter)
 app.use('/user', userRouter)
 
+app.use('/', (req, res, next) => {
+    res.redirect('/cookbooks')
+})
+
 app.use((req, res, next) => {
     const error = new Error ("No encontramos lo que buscabas")
     error.status = 404
