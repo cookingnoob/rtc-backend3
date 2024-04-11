@@ -1,6 +1,6 @@
 import CookBooks from "../models/cookbooks.js";
 import Recipes from "../models/recipes.js";
-
+import mongoose from 'mongoose'
 //GET busca todos los libros de cocina y obtiene el nombre de las recetas
 const getAllCookBooks = async (req, res, next) => {
   try {

@@ -22,7 +22,7 @@ const getRecipeById = async (req, res, next) => {
       );
       res.status(200).json({ data: recipe });
     } catch {
-      const error = new Error("No se encontró el libro de cocina que buscabas");
+      const error = new Error("No se encontró la receta que buscabas");
       error.status = 404;
       next(error);
     }

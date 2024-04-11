@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get("/", getAllRecipes)
 
-router.get("/:id", getRecipeById)
+router.get("/find/:id", getRecipeById)
 
 router.post("/add", validateToken,postNewRecipe)
 
