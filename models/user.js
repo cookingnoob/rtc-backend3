@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const userSchema = new mongoose.Schema({
-    email: 
+    email:
     {
         type: String,
         required: true,
@@ -12,9 +12,11 @@ const userSchema = new mongoose.Schema({
     {
         type: String,
     },
-    avatar: 
-    {type: String}
-})
+    avatar:
+        { type: String }
+},
+    { timestamps: true }
+)
 
 const Users = mongoose.model('users', userSchema)
 

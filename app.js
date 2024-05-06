@@ -85,8 +85,8 @@ app.use((err, req, res, next) => {
     }
 })
 
-const PORT = process.env.PORT || 3000
+const port = process.env.PORT || 3000
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`conectado al puerto ${PORT}`)
+app.listen(port, '0.0.0.0', () => {
+    console.log(`conectado en http://localhost:${port}`)
 })

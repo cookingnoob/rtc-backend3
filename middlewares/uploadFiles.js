@@ -1,5 +1,5 @@
 import multer from "multer";
-import {v2 as cloudinary} from 'cloudinary'
+import { v2 as cloudinary } from 'cloudinary'
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const handleCloudinaryStorage = (folderName) => {
@@ -14,11 +14,15 @@ const handleCloudinaryStorage = (folderName) => {
 
 const uploadFile = (folderName) => {
   const storage = handleCloudinaryStorage(folderName)
-  return multer({storage}) 
+  return multer({ storage })
 }
 
 const uploadAvatars = uploadFile('avatars').single('avatar')
 
 const uploadBookCover = uploadFile('covers').single('cover')
 
-export {uploadAvatars, uploadBookCover}
+// cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
+//   { public_id: "olympic_flag" },
+//   function (error, result) { console.log(result); });
+
+export { uploadAvatars, uploadBookCover }
