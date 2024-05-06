@@ -9,7 +9,9 @@ import userRouter from './routes/user.js'
 import { limiter } from "./middlewares/rateLimiter.js"
 import cors from 'cors'
 import helmet from 'helmet'
+import { v2 as cloudinary } from 'cloudinary'
 
+//CONFIG
 const app = express()
 
 app.use(cors({
@@ -22,10 +24,16 @@ app.disable('x-powered-by');
 
 app.use(helmet())
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 
+//cloudinary
+cloudinary.config({
+    secure: true
+});
+console.log(cloudinary.config());
 
+//MONGODB
 dbConnection()
 
 //Estas 3 funciones son para poblar la bbdd y enlazar los IDS entre colecciones
@@ -48,7 +56,7 @@ dbConnection()
 app.set('trust proxy', true);
 app.use(limiter)
 
-//rutas
+//RUTAS
 app.use("/cookbooks", cookbookRouter)
 app.use("/recipes", recipesRouter)
 app.use('/user', userRouter)
@@ -57,22 +65,23 @@ app.use('/', (req, res, next) => {
     res.redirect('/cookbooks')
 })
 
+//MANEJO ERRORES
 app.use((req, res, next) => {
-    const error = new Error ("No encontramos lo que buscabas")
+    const error = new Error("No encontramos lo que buscabas")
     error.status = 404
     next(error)
 })
 
 app.use((err, req, res, next) => {
     console.error(err)
-    if(err.status){
-        res.status(err.status).json({error: err.message})
-    }else if (err.name === 'ValidationError'){
-        res.status(400).json({error: 'Validación fallida', error: err.message})
-    }else if (err.code && err.code === 11000){
-        res.status(409).json({error: 'La informacion se está duplicando'})
-    }else{
-        res.status(500).json({error: 'Error interno en el servidor'})
+    if (err.status) {
+        res.status(err.status).json({ error: err.message })
+    } else if (err.name === 'ValidationError') {
+        res.status(400).json({ error: 'Validación fallida', error: err.message })
+    } else if (err.code && err.code === 11000) {
+        res.status(409).json({ error: 'La informacion se está duplicando' })
+    } else {
+        res.status(500).json({ error: 'Error interno en el servidor' })
     }
 })
 
