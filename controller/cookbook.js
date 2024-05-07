@@ -1,6 +1,7 @@
 import CookBooks from "../models/cookbooks.js";
 import Recipes from "../models/recipes.js";
 import mongoose from 'mongoose'
+import { v2 as cloudinary } from 'cloudinary'
 //GET busca todos los libros de cocina y obtiene el nombre de las recetas
 const getAllCookBooks = async (req, res, next) => {
   try {
@@ -75,12 +76,12 @@ const handleCoverUrlInDb = async (req, res, next) => {
       { cover: path },
       { new: true, runValidators: true }
     );
-    if(!cookbookExists){
+    if (!cookbookExists) {
       const error = new Error("no existe ese libro");
       error.status = 404;
       next(error);
     }
-    res.status(200).json({data: cookbookExists})
+    res.status(200).json({ data: cookbookExists })
   } catch (error) {
     next(error);
   }
@@ -173,6 +174,33 @@ const deleteCookBook = async (req, res, next) => {
   }
 };
 
+const deleteBookCover = async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const bookToDeleteCover = await CookBooks.findById(id)
+
+    if (!bookToDeleteCover) {
+      const error = new Error('no existe ese libro')
+      error.status = 400
+      next(error)
+    }
+    const bookCoverUrl = bookToDeleteCover.cover
+    const match = bookCoverUrl.match(/(covers\/[^.]+)/);
+    const bookID = match ? match[1] : "ID no encontrado";
+    try {
+      cloudinary.uploader.destroy(bookID);
+      console.log('se elimino la imagen')
+    } catch (error) {
+      next(error)
+    }
+    bookToDeleteCover.cover = null
+    await bookToDeleteCover.save()
+    res.status(200).json({ data: `se elimo la portada del libro ${bookToDeleteCover.title}` })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export {
   getAllCookBooks,
   getCookBookById,
@@ -180,5 +208,6 @@ export {
   putEditCookBook,
   putEditRecipesInCookBook,
   deleteCookBook,
+  deleteBookCover,
   handleCoverUrlInDb,
 };
