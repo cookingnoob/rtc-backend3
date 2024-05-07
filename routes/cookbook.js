@@ -1,5 +1,5 @@
 import express from 'express'
-import { deleteBookCover, deleteCookBook, getAllCookBooks, getCookBookById, handleCoverUrlInDb, postNewCoobook, putEditCookBook, putEditRecipesInCookBook } from '../controller/cookbook.js'
+import { deleteBookCover, deleteCookBook, deleteRecipeFromCookbook, getAllCookBooks, getCookBookById, handleCoverUrlInDb, postNewCoobook, putEditCookBook, putEditRecipesInCookBook } from '../controller/cookbook.js'
 import { validateToken } from '../middlewares/authJWT.js'
 import { uploadBookCover } from '../middlewares/uploadFiles.js'
 
@@ -13,13 +13,15 @@ router.post('/add', validateToken, postNewCoobook)
 
 router.post('/add-cover/:id', validateToken, uploadBookCover, handleCoverUrlInDb)
 
-router.put('/edit/:id', validateToken, putEditCookBook)
+router.patch('/edit/:id', validateToken, putEditCookBook)
 
-router.put('/:id/update-recipes', validateToken, putEditRecipesInCookBook)
+router.patch('/update-recipes/:id', validateToken, putEditRecipesInCookBook)
 
 router.delete('/delete/:id', validateToken, deleteCookBook)
 
-router.delete('/delete-cover/:id', deleteBookCover)
+router.delete('/delete-cover/:id', validateToken, deleteBookCover)
+
+router.delete('/delete-recipe/:id', validateToken, deleteRecipeFromCookbook)
 
 
 export default router

@@ -2,6 +2,7 @@ import CookBooks from "../models/cookbooks.js";
 import Recipes from "../models/recipes.js";
 import mongoose from 'mongoose'
 import { v2 as cloudinary } from 'cloudinary'
+
 //GET busca todos los libros de cocina y obtiene el nombre de las recetas
 const getAllCookBooks = async (req, res, next) => {
   try {
@@ -119,7 +120,7 @@ const putEditCookBook = async (req, res, next) => {
 const putEditRecipesInCookBook = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, price, genre, recipe, deleteRecipe } = req.body;
+    const { title, price, genre, recipe, } = req.body;
     if (title || price || genre) {
       const error = new Error("solo puedes editar recetas aqui");
       error.status = 400;
@@ -133,11 +134,7 @@ const putEditRecipesInCookBook = async (req, res, next) => {
       return recipe._id.toString() === recipeAlradyInDB._id.toString();
     });
 
-    if (deleteRecipe) {
-      cookBook.recipes.pull(recipeAlradyInDB._id);
-      await cookBook.save();
-      res.status(200).json({ data: "Se eliminó la receta del libro" });
-    } else if (isRecipeInBook && !deleteRecipe) {
+    if (isRecipeInBook) {
       const error = new Error("ya existe esa receta en este libro");
       error.status = 409;
       next(error);
@@ -156,6 +153,26 @@ const putEditRecipesInCookBook = async (req, res, next) => {
     next(error);
   }
 };
+
+const deleteRecipeFromCookbook = async (req, res, next) => {
+  const { id } = req.params;
+  const { recipe } = req.body
+  const cookBook = await CookBooks.findById(id);
+  if (!cookBook) {
+    const error = new Error("no existe ese libro");
+    error.status = 409;
+    next(error);
+  }
+  const recipeAlradyInDB = await Recipes.findOneAndUpdate({ name: recipe }, { cookbook: null });
+  if (!recipeAlradyInDB) {
+    const error = new Error("no existe esa receta");
+    error.status = 409;
+    next(error);
+  }
+  cookBook.recipes.pull(recipeAlradyInDB._id);
+  await cookBook.save();
+  res.status(200).json({ data: "Se eliminó la receta del libro" });
+}
 
 //delete
 const deleteCookBook = async (req, res, next) => {
@@ -210,4 +227,5 @@ export {
   deleteCookBook,
   deleteBookCover,
   handleCoverUrlInDb,
+  deleteRecipeFromCookbook
 };
