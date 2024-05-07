@@ -12,15 +12,12 @@ const cookBookSchema = new mongoose.Schema(
             }
         ],
         cover: String,
-        // recipes: [
-        //     {type: String}
-        // ]
     },
     {
         timestamps: true,
         model: 'cookbooks'
     }
-) 
+)
 
 const CookBooks = mongoose.model("Cookbooks", cookBookSchema)
 

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import seedDB from "./seedDB.js";
 
 const dbConnection = async () => {
     try {
