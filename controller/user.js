@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
 import Users from "../models/user.js";
-import { signToken } from "../config/jwt.js";
+import { signToken } from "../middlewares/jwt.js";
 import { validationResult } from "express-validator";
+import { v2 as cloudinary } from 'cloudinary'
 
 const registerUser = async (req, res, next) => {
   try {
@@ -79,10 +80,36 @@ const handleAvatarUrlInDb = async (req, res, next) => {
       error.status = 404;
       next(error);
     }
-    res.status(200).json({ data: "se subio el avatar exitosamente" });
+    res.status(201).json({ data: "se subio el avatar exitosamente" });
   } catch (error) {
     next(error);
   }
 };
 
-export { registerUser, loginUser, handleAvatarUrlInDb };
+const deleteAvatar = async (req, res, next) => {
+  const { id } = req.user;
+  try {
+    const userInDB = await Users.findById(id)
+    if (!userInDB) {
+      const error = new Error('no existe ese usuario')
+      error.status = 400
+      next(error)
+    }
+    const avatarURL = userInDB.avatar.toString()
+    const match = avatarURL.match(/(avatars\/[^.]+)/);
+    const avatarID = match ? match[1] : "ID no encontrado";
+    try {
+      cloudinary.uploader.destroy(avatarID);
+      console.log('se elimino la imagen')
+    } catch (error) {
+      next(error)
+    }
+    userInDB.avatar = null
+    await userInDB.save()
+    res.status(200).json({ data: 'se elimino la imagen del usuario' })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export { registerUser, loginUser, handleAvatarUrlInDb, deleteAvatar };

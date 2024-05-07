@@ -9,7 +9,7 @@ import userRouter from './routes/user.js'
 import { limiter } from "./middlewares/rateLimiter.js"
 import cors from 'cors'
 import helmet from 'helmet'
-import { v2 as cloudinary } from 'cloudinary'
+
 
 //CONFIG
 const app = express()
@@ -26,12 +26,6 @@ app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
-
-//cloudinary
-cloudinary.config({
-    secure: true
-});
-console.log(cloudinary.config());
 
 //MONGODB
 dbConnection()
